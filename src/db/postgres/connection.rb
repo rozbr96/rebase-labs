@@ -2,11 +2,11 @@
 require_relative 'parser'
 
 class PGConnection
-  HOST = '127.0.0.1'
-  DB_NAME = 'rebase_labs'
-  USERNAME = 'rebase'
-  PASSWORD = 'labs'
-  PORT = 5432
+  HOST = ENV['DB_HOST']
+  DB_NAME = ENV['DB_NAME']
+  USERNAME = ENV['DB_USERNAME']
+  PASSWORD = ENV['DB_PASSWORD']
+  PORT = ENV['DB_PORT']
 
   def self.execute sql_command
     %x(

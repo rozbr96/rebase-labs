@@ -14,3 +14,17 @@ services:
 
     volumes:
       - ./sql_scripts/:/docker-entrypoint-initdb.d/
+
+  api:
+    build:
+      context: ./src
+      dockerfile: ../Dockerfile.api
+
+    ports:
+      - 10000:10000
+
+    env_file: .env.api
+
+    volumes:
+      - ./src/:/app
+      - ./sample/data.csv:/app/sample/data.csv
