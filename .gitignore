@@ -1,3 +1,5 @@
 .bundle
 .env.*
 !.env.*.example
+.pg_data
+src/sample
