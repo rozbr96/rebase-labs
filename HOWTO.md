@@ -47,6 +47,7 @@ docker run --detach \
   --network labs \
   --restart always \
   --volume $(pwd)/sql_scripts/:/docker-entrypoint-initdb.d/ \
+  --volume $(pwd)/.pg_data:/var/lib/postgresql/data \
   postgres:16
 ```
 
