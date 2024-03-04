@@ -18,6 +18,16 @@ class Router
   end
 
   def get path, handler
-    @routes << Route.new(method: 'get', path:, handler:)
+    add_route 'get', path, handler
+  end
+
+  def post path, handler
+    add_route 'post', path, handler
+  end
+
+  private
+
+  def add_route method, path, handler
+    @routes << Route.new(method:, path:, handler:)
   end
 end

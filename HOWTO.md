@@ -20,9 +20,11 @@ Now, follow the instructions according to your environment:
     - [Database](#the-database-one)
     - [API](#the-api-one)
   - [Populate](#populate)
+  - [Tests](#tests-with-docker)
 - [Docker Compose](#docker-compose)
   - [Start the services](#start-the-services-with-docker-compose)
   - [Populate](#populate-the-initial-data-with-docker-compose)
+  - [Tests](#tests-with-docker-compose)
 
 ## Docker Only
 
@@ -72,6 +74,11 @@ With both containers up and running, you can populate the initial data as follow
 docker exec labs_api ruby import_from_csv.rb
 ```
 
+#### Tests with docker
+```bash
+docker exec labs_api rspec
+```
+
 
 ## Docker Compose
 
@@ -83,4 +90,9 @@ docker-compose up --detach
 #### Populate the initial data with docker compose:
 ```bash
 docker-compose exec api ruby import_from_csv.rb
+```
+
+#### Tests with docker compose
+```bash
+docker-compose exec api rspec
 ```

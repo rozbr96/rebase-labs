@@ -1,0 +1,12 @@
+GET /users HTTP/1.1
+Accept-Encoding: gzip,deflate
+Host: www.herongyang.com
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+Content-Type: application/json
+
+{
+  "age": 42,
+  "gender": "F",
+  "height_in_cm": 169
+}
