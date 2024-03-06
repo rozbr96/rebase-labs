@@ -16,7 +16,7 @@ services:
       - ./sql_scripts/:/docker-entrypoint-initdb.d/
       - ./.pg_data:/var/lib/postgresql/data
 
-  api:
+  api: &api
     build:
       context: ./src
       dockerfile: ../Dockerfile.api
@@ -29,3 +29,11 @@ services:
     volumes:
       - ./src/:/app
       - ./sample/data.csv:/app/sample/data.csv
+
+    depends_on:
+      - postgres_db
+
+  dev:
+    <<: *api
+
+    command: nodemon --ext rb,js,html,css --exec ruby server.rb

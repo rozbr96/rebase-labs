@@ -84,7 +84,7 @@ docker exec labs_api rspec
 
 #### Start the services with docker compose:
 ```bash
-docker-compose up --detach
+docker-compose up --detach api
 ```
 
 #### Populate the initial data with docker compose:

@@ -5,8 +5,10 @@ WORKDIR /app
 
 RUN apt update
 RUN apt install -y postgresql-client \
-  firefox-esr
+  firefox-esr \
+  npm
 
+RUN npm install -g nodemon
 RUN gem install rspec capybara
 
 CMD [ "ruby", "server.rb" ]
