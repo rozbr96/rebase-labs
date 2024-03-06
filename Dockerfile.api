@@ -9,6 +9,6 @@ RUN apt install -y postgresql-client \
   npm
 
 RUN npm install -g nodemon
-RUN gem install rspec capybara
+RUN gem install rspec capybara selenium-webdriver
 
 CMD [ "ruby", "server.rb" ]
