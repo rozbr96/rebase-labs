@@ -4,7 +4,9 @@ FROM ruby:3.2.2
 WORKDIR /app
 
 RUN apt update
-RUN apt install -y postgresql-client
-RUN gem install rspec
+RUN apt install -y postgresql-client \
+  firefox-esr
+
+RUN gem install rspec capybara
 
 CMD [ "ruby", "server.rb" ]
