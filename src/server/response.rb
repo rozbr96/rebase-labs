@@ -7,6 +7,7 @@ class Response
 
   CONTENT_TYPES = {
     :js => 'application/javascript',
+    :css => 'text/css',
   }
 
   def initialize client
