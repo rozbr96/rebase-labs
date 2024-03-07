@@ -1,5 +1,6 @@
 
 require_relative 'route'
+require_relative 'response'
 
 class Router
   def initialize
@@ -7,11 +8,13 @@ class Router
   end
 
   def route request
+    response = Response.new request.client
+
     @routes.each do |route|
       next unless route.method == request.method
       next unless route.path == request.path
 
-      route.handler.call request
+      route.handler.call request, response
 
       break
     end

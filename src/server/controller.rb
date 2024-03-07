@@ -1,6 +1,6 @@
 
 class Controller
-  def self.tests request
+  def self.tests request, response
     exams = Exam.select(joins: {
         Doctor => %w[doctor_id id],
         Patient => %w[patient_id id],
@@ -11,12 +11,8 @@ class Controller
         Patient => %w[citizen_id_number name email birth_date street_address city state],
         ExamType => %w[name limits],
       }
-    ).to_json
+    )
 
-    request.client.puts "HTTP/1.1 200 OK"
-    request.client.puts "Content-type: application/json"
-    request.client.puts ""
-    request.client.puts exams
-    request.client.close
+    response.json data: exams, status: :ok
   end
 end
