@@ -4,7 +4,10 @@ class Route
 
   def initialize method:, path:, handler:
     @method = method
-    @path = path
+
+    path.gsub!(/:(\w+)/, '(?<\1>.+)')
+
+    @path = Regexp.new "^#{path}$"
     @handler = handler
   end
 end

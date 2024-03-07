@@ -12,7 +12,9 @@ class Router
 
     @routes.each do |route|
       next unless route.method == request.method
-      next unless route.path == request.path
+      next unless route.path.match? request.path
+
+      request.set_params route.path.match request.path
 
       route.handler.call request, response
 
