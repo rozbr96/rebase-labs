@@ -1,21 +1,31 @@
 
 class Model
   TABLE_NAME = ''
+  TABLE_COLUMNS = []
 
-  def self.create data
-    fields, values = [], []
+  def self.create data, foreign_keys: {}
+    create_multiple [data], foreign_keys:
+  end
 
-    data.each_pair do |field, value|
-      fields << field
-      values << value
-    end
+  def self.create_multiple data, foreign_keys: {}
+    values = data.map do |row_data|
+      row_values = self::TABLE_COLUMNS.map do |column|
+        next "\\\$\\\$#{row_data[column]}\\\$$" unless foreign_keys.key? column
 
-    fields = "(#{fields.join ','})"
-    values = values.map { |value| "\\\$\\\$#{value}\\\$$" }.join ','
+        table = foreign_keys[column][:get_from]
+        filter = foreign_keys[column][:using].map do |field|
+          "#{field} = '#{row_data[field]}'"
+        end.join ' AND '
+
+        "(SELECT id FROM #{table} WHERE #{filter})"
+      end.join ','
+
+      "(#{row_values})"
+    end.join ', '
 
     PGConnection.execute %(
-      INSERT INTO #{self::TABLE_NAME} #{fields}
-      VALUES (#{values})
+      INSERT INTO #{self::TABLE_NAME} (#{self::TABLE_COLUMNS.join ', '})
+      VALUES #{values}
     )
   end
 
