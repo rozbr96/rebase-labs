@@ -3,6 +3,7 @@
 class Response
   MESSAGES = {
     :ok => '200 OK',
+    :not_found => '404 NOT_FOUND',
   }
 
   CONTENT_TYPES = {
