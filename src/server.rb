@@ -3,13 +3,13 @@ require 'socket'
 require_relative 'models'
 require_relative 'server/router.rb'
 require_relative 'server/request.rb'
-require_relative 'server/controller.rb'
+require_relative 'server/controllers'
 
 
 router = Router.new
-router.get '/', Controller.method(:index)
-router.get '/tests', Controller.method(:tests)
-router.get '/static/:static_file', Controller.method(:serve_static_file)
+router.get '/', Controller::WEB.method(:index)
+router.get '/api/v1/tests', Controller::API::V1.method(:tests)
+router.get '/static/:static_file', Controller::WEB.method(:serve_static_file)
 
 
 Socket.tcp_server_loop ENV['API_PORT'] do |client|
