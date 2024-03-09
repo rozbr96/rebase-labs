@@ -29,6 +29,12 @@ class Model
     )
   end
 
+  def self.delete_all
+    PGConnection.execute %(
+      DELETE FROM #{self::TABLE_NAME}
+    )
+  end
+
   def self.get_or_create data
     existing_records = where data
 

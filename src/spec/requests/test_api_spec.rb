@@ -2,10 +2,29 @@
 require 'json'
 require 'net/http'
 
+require_relative '../../libs/importer'
+
 
 describe 'API' do
   context 'GET /tests' do
-    it 'success' do
+    it 'success with empty results' do
+      uri = URI "http://localhost:#{ENV['API_PORT']}/tests"
+      response = Net::HTTP.get_response uri
+
+      expect(response.code).to eq '200'
+      expect(response.content_type).to eq 'application/json'
+
+      json_response = JSON.parse(response.body)
+
+      expect(json_response.count).to eq 0
+    end
+
+    it 'success with some results' do
+      app_dir = File.absolute_path '.'
+      filepath = File.join app_dir, 'spec', 'requests', 'tests_data.csv'
+      importer = Importer.new csv_filepath: filepath
+      importer.prepare_data.save_all
+
       uri = URI "http://localhost:#{ENV['API_PORT']}/tests"
       response = Net::HTTP.get_response uri
 
@@ -15,7 +34,7 @@ describe 'API' do
       json_response = JSON.parse(response.body)
       exam = json_response.first
 
-      expect(exam['exam_id']).to eq '1'
+      expect(json_response.count).to eq 2
       expect(exam['exam_date']).to eq '2021-08-05'
       expect(exam['exam_result']).to eq '97'
       expect(exam['exam_token_result']).to eq 'IQCZ17'
