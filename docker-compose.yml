@@ -1,20 +1,32 @@
 
 version: '3'
 
-services:
-  postgres_db:
-    image: postgres:16
+networks:
+  tests:
 
-    ports:
-      - 5432:5432
+services:
+  postgres_db: &postgres_db
+    image: postgres:16
 
     env_file: .env.postgres
 
     restart: always
 
+  postgres_api_db:
+    <<: *postgres_db
+
     volumes:
       - ./sql_scripts/:/docker-entrypoint-initdb.d/
       - ./.pg_data:/var/lib/postgresql/data
+
+  postgres_tests_db:
+    <<: *postgres_db
+
+    networks:
+      - tests
+
+    volumes:
+      - ./sql_scripts/:/docker-entrypoint-initdb.d/
 
   api: &api
     build:
@@ -31,9 +43,28 @@ services:
       - ./sample/data.csv:/app/sample/data.csv
 
     depends_on:
-      - postgres_db
+      - postgres_api_db
 
   dev:
     <<: *api
 
     command: nodemon --ext rb,js,html,css --exec ruby server.rb
+
+  api_tests_server:
+    build:
+      context: ./src
+      dockerfile: ../Dockerfile.api.tests
+
+    networks:
+      - tests
+
+    env_file: .env.api
+
+    environment:
+      - DB_HOST=postgres_tests_db
+
+    volumes:
+      - ./src/:/app
+
+    depends_on:
+      - postgres_tests_db
