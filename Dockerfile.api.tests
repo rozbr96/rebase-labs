@@ -4,7 +4,8 @@ FROM ruby:3.2.2
 WORKDIR /app
 
 RUN apt update
-RUN apt install -y postgresql-client firefox-esr
+RUN apt install -y postgresql-client firefox-esr npm
 RUN gem install rspec capybara selenium-webdriver
+RUN npm install -g nodemon
 
-CMD [ "ruby", "server.rb" ]
+CMD [ "nodemon", "--ext", "rb,js,html,css", "--exec", "ruby", "server.rb" ]
