@@ -12,3 +12,12 @@ RSpec.configure do |config|
     ExamType.delete_all
   end
 end
+
+def get_filepath_for filename
+  app_dir = File.absolute_path '.'
+  File.join app_dir, 'spec', 'support', filename
+end
+
+def read_file_from_support filename
+  File.read get_filepath_for filename
+end

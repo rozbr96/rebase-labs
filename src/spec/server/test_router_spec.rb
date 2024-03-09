@@ -22,7 +22,7 @@ describe Router do
 
   describe '#route' do
     it 'calls the right handler' do
-      request_text = File.open(File.join(File.absolute_path('.'), 'spec', 'server', 'request_text.txt')).read
+      request_text = read_file_from_support 'request_text.txt'
 
       request = Request.new request_text:, client: nil
 
@@ -38,7 +38,7 @@ describe Router do
     end
 
     it 'calls the right handler with named parameters' do
-      request_text = File.open(File.join(File.absolute_path('.'), 'spec', 'server', 'request_with_mult_levels_text.txt')).read
+      request_text = read_file_from_support 'request_with_mult_levels_text.txt'
 
       request = Request.new request_text:, client: nil
 

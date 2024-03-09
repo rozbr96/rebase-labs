@@ -10,10 +10,7 @@ describe Importer do
     end
 
     it 'sets initial data accordingly' do
-      app_dir = File.absolute_path '.'
-      filepath = File.join app_dir, 'spec', 'libs', 'tests_data.csv'
-      csv_data = File.read filepath
-
+      filepath = get_filepath_for 'tests_data.csv'
       importer = Importer.new csv_filepath: filepath
 
       expect(importer.doctors).to eq []
@@ -35,10 +32,7 @@ describe Importer do
 
   describe '#prepare_data' do
     it 'populates the data correctly' do
-      app_dir = File.absolute_path '.'
-      filepath = File.join app_dir, 'spec', 'libs', 'tests_data.csv'
-      csv_data = File.read filepath
-
+      csv_data = read_file_from_support 'tests_data.csv'
       importer = Importer.new csv_raw_data: csv_data
       importer.prepare_data
 

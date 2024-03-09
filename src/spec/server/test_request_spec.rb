@@ -5,7 +5,7 @@ describe Request do
   describe 'initialize' do
     context 'parsed values' do
       it 'parses the requests values succesfully' do
-        request_text = File.open(File.join(File.absolute_path('.'), 'spec', 'server', 'request_text.txt')).read
+        request_text = read_file_from_support 'request_text.txt'
 
         request = Request.new request_text:, client: nil
 

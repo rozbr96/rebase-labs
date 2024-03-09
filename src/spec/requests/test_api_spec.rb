@@ -20,8 +20,7 @@ describe 'API' do
     end
 
     it 'success with some results' do
-      app_dir = File.absolute_path '.'
-      filepath = File.join app_dir, 'spec', 'requests', 'tests_data.csv'
+      filepath = get_filepath_for 'tests_data.csv'
       importer = Importer.new csv_filepath: filepath
       importer.prepare_data.save_all
 
