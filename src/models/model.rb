@@ -45,7 +45,7 @@ class Model
     where(data).first
   end
 
-  def self.select joins:, fields_selection:
+  def self.select joins:, fields_selection:, where: {}
     selected_fields = fields_selection.each_pair.map do |model, fields|
       fields.map do |field|
         "#{model::TABLE_NAME}.#{field} #{model::TABLE_NAME}_#{field}"
@@ -59,10 +59,15 @@ class Model
       )
     end.join ' '
 
+    filters = where.each_pair.map do |field, value|
+      "#{field} = \\\$\\\$#{value}\\\$$"
+    end.join ' AND '
+
     PGParser.parse_select_output PGConnection.execute %(
       SELECT #{selected_fields}
       FROM #{self::TABLE_NAME}
       #{ joinings }
+      #{"WHERE #{filters}" unless filters.empty?}
     )
   end
 

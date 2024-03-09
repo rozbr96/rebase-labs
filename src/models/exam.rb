@@ -7,8 +7,8 @@ class Exam < Model
   TABLE_NAME = 'exam'
   TABLE_COLUMNS = %i[patient_id doctor_id exam_type_id date result token_result]
 
-  def self.select joins:, fields_selection:, version: 'V1'
-    v1_data = super(joins:, fields_selection:)
+  def self.select joins:, fields_selection:, where: {}, version: 'V1'
+    v1_data = super(joins:, fields_selection:, where:)
 
     return v1_data if version == 'V1'
 
