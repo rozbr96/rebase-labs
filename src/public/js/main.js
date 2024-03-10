@@ -40,11 +40,11 @@ function populateTable(data) {
 
 
 function loadTestsAndPopulateTable() {
-  fetch('/tests')
+  fetch('/api/v1/tests')
     .then(async (resp) => {
       const exams = await resp.json()
 
-      populateTable(exams)
+      if (exams.length) populateTable(exams)
     }).catch((err) => {
       console.error(err)
 
