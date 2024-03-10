@@ -10,7 +10,7 @@ class Model
   def self.create_multiple data, foreign_keys: {}
     values = data.map do |row_data|
       row_values = self::TABLE_COLUMNS.map do |column|
-        next "\\\$\\\$#{row_data[column]}\\\$$" unless foreign_keys.key? column
+        next escaped_value row_data[column] unless foreign_keys.key? column
 
         table = foreign_keys[column][:get_from]
         filter = foreign_keys[column][:using].map do |field|
@@ -60,12 +60,14 @@ class Model
     end.join ' '
 
     filters = where.each_pair.map do |field, where_data|
-      value = where_data[:value]
+      value = escaped_value where_data[:value]
       ignore_case = where_data[:ignore_case]
+      partial_match = where_data[:partial_match]
 
-      next "#{field} ILIKE \\\$\\\$#{value}\\\$$" if ignore_case
+      next "#{field} ILIKE #{value}" if ignore_case
+      next %(#{field} LIKE "%#{value}%") if partial_match
 
-      "#{field} = \\\$\\\$#{value}\\\$$"
+      "#{field} = #{value}"
     end.join ' AND '
 
     PGParser.parse_select_output PGConnection.execute %(
@@ -78,7 +80,7 @@ class Model
 
   def self.where data
     filters = data.each_pair.map do |field, value|
-      "#{field} = \\\$\\\$#{value}\\\$$"
+      "#{field} = #{escaped_value value}"
     end.join ' AND '
 
     PGParser.parse_select_output PGConnection.execute %(
@@ -86,5 +88,11 @@ class Model
       FROM #{self::TABLE_NAME}
       WHERE #{filters}
     )
+  end
+
+  private
+
+  def self.escaped_value value
+    "\\\$\\\$#{value}\\\$$"
   end
 end
