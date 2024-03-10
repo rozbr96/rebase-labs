@@ -59,7 +59,12 @@ class Model
       )
     end.join ' '
 
-    filters = where.each_pair.map do |field, value|
+    filters = where.each_pair.map do |field, where_data|
+      value = where_data[:value]
+      ignore_case = where_data[:ignore_case]
+
+      next "#{field} ILIKE \\\$\\\$#{value}\\\$$" if ignore_case
+
       "#{field} = \\\$\\\$#{value}\\\$$"
     end.join ' AND '
 

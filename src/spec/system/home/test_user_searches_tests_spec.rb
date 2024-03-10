@@ -23,7 +23,7 @@ describe 'User searches for tests', type: :feature do
     visit "http://127.0.0.1:#{ENV['API_PORT']}"
 
     within '#search-form' do
-      fill_in 'search-input', with: 'IQCZ17'
+      fill_in 'search-input', with: 'IqcZ17'
       click_on 'Buscar'
     end
 

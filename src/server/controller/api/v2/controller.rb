@@ -13,7 +13,10 @@ module Controller
             Patient => %w[citizen_id_number name email birth_date street_address city state],
             ExamType => %w[name limits],
           }, where: {
-            'exam.token_result': request.params['token']
+            'exam.token_result': {
+              :value => request.params['token'],
+              :ignore_case => true,
+            },
           }, version: 'V2'
         ).first
 
