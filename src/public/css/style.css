@@ -26,3 +26,19 @@ table {
 .text-right {
   text-align: right;
 }
+
+#search-form {
+  display: flex;
+  flex-direction: row-reverse;
+  margin: 10px;
+}
+
+#search-input {
+  height: 30px;
+  width: 20vw;
+}
+
+#search-button {
+  margin-left: 10px;
+  cursor: pointer;
+}

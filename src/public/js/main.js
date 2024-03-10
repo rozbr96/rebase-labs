@@ -41,8 +41,12 @@ function generateRow(bgColorClass, cells) {
   return row
 }
 
+function getTableBody() {
+  return document.querySelector('#exams-table tbody')
+}
+
 function populateTable(data) {
-  const tableBody = document.querySelector('#exams-table tbody')
+  const tableBody = getTableBody()
 
   tableBody.innerHTML = ''
   data.forEach((rowData, index) => {
@@ -64,21 +68,42 @@ function populateTable(data) {
   })
 }
 
+function clearTable() {
+  const tableBody = getTableBody()
+  tableBody.innerHTML = `
+    <tr>
+      <td colspan="11" class="text-center">Nenhum registro para ser exibido!</td>
+    </tr>
+  `
+}
+
 
 function loadTestsAndPopulateTable() {
-  fetch('/api/v2/tests')
+  const searchInput = document.getElementById('search-input')
+  const url = searchInput.value
+    ? `/api/v2/tests/${searchInput.value}`
+    : '/api/v2/tests'
+
+  fetch(url)
     .then(async (resp) => {
-      const exams = await resp.json()
+      let exams = await resp.json()
+
+      if (!Array.isArray(exams)) exams = [exams]
 
       if (exams.length) populateTable(exams)
+      else clearTable()
     }).catch((err) => {
       console.error(err)
 
-      setTimeout(loadTestsAndPopulateTable, 10000)
+      clearTable()
     })
 }
 
 
 document.addEventListener('DOMContentLoaded', () => {
+  loadTestsAndPopulateTable()
+})
+
+document.getElementById('search-button').addEventListener('click', () => {
   loadTestsAndPopulateTable()
 })
