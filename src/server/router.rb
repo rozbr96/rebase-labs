@@ -1,7 +1,4 @@
 
-require_relative 'route'
-require_relative 'response'
-
 class Router
   def initialize
     @routes = []

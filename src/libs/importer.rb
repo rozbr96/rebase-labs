@@ -1,8 +1,4 @@
 
-require 'csv'
-require_relative 'data_extractor'
-require_relative '../models'
-
 class Importer
   attr_reader :columns, :rows, :doctors, :exams, :exam_types, :patients
 

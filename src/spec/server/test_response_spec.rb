@@ -1,6 +1,4 @@
 
-require_relative '../../server//response'
-
 describe Response do
   describe '#json' do
     it 'sends the response with the necessary headers' do

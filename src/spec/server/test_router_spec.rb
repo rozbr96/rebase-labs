@@ -1,6 +1,4 @@
 
-require_relative '../../server/router.rb'
-
 describe Router do
   describe '#get, #post' do
     it 'adds the route to the routes list with the right method´' do

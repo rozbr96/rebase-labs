@@ -1,6 +1,4 @@
 
-require_relative 'parser'
-
 class PGConnection
   HOST = ENV['DB_HOST']
   DB_NAME = ENV['DB_NAME']

@@ -1,9 +1,5 @@
 
-require 'socket'
-require_relative 'models'
-require_relative 'server/router.rb'
-require_relative 'server/request.rb'
-require_relative 'server/controllers'
+require_relative 'imports'
 
 
 class Socket

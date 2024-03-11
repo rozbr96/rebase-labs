@@ -1,6 +1,4 @@
 
-require_relative '../../../libs/importer.rb'
-
 describe 'User visits the home page', type: :feature do
   it 'and sees no existing exams' do
     visit root_url

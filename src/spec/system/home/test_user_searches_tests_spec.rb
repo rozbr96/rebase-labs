@@ -1,6 +1,4 @@
 
-require_relative '../../../libs/importer.rb'
-
 describe 'User searches for tests', type: :feature do
   it 'and finds no results' do
     csv_raw_data = read_file_from_support 'tests_data.csv'

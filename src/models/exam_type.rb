@@ -1,6 +1,4 @@
 
-require_relative 'model'
-
 class ExamType < Model
   attr_accessor :id, :name, :limits
 

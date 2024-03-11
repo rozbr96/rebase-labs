@@ -1,6 +1,4 @@
 
-require_relative '../../server/request.rb'
-
 describe Request do
   describe 'initialize' do
     context 'parsed values' do

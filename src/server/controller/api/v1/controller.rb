@@ -1,6 +1,4 @@
 
-require_relative '../../../../libs/importer'
-
 module Controller
   module API
     module V1

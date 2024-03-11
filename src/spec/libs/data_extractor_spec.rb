@@ -1,6 +1,4 @@
 
-require_relative '../../libs/data_extractor'
-
 describe DataExtractor do
   before :all do
     @columns = [

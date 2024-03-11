@@ -1,6 +1,4 @@
 
-require_relative '../../libs/importer'
-
 describe Importer do
   describe 'initialize' do
     it 'fails if no data is given' do

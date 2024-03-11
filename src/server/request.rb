@@ -1,7 +1,4 @@
 
-require 'json'
-require 'tempfile'
-
 class Request
   attr_reader :method, :path, :headers, :data, :client, :params, :file
 

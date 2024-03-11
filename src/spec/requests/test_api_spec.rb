@@ -1,10 +1,4 @@
 
-require 'json'
-require 'net/http'
-
-require_relative '../../libs/importer'
-
-
 describe 'API' do
   context 'V1' do
     context 'GET /tests' do
