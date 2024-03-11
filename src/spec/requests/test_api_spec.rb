@@ -124,7 +124,7 @@ describe 'API' do
         importer = Importer.new csv_raw_data: csv_data
         importer.prepare_data.save_all
 
-        uri = URI "http://localhost:#{ENV['API_PORT']}/api/v2/tests/IQCZ17"
+        uri = URI api_v2_test_url 'IQCZ17'
         response = Net::HTTP.get_response uri
 
         expect(response.code).to eq '200'
@@ -165,7 +165,7 @@ describe 'API' do
         importer = Importer.new csv_raw_data: csv_data
         importer.prepare_data.save_all
 
-        uri = URI "http://localhost:#{ENV['API_PORT']}/api/v2/tests/NON_EXISTENT_TOKEN"
+        uri = URI api_v2_test_url 'NON_EXISTENT_TOKEN'
         response = Net::HTTP.get_response uri
 
         expect(response.code).to eq '404'

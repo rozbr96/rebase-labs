@@ -4,7 +4,7 @@ require_relative '../../server//response'
 describe Response do
   describe '#json' do
     it 'sends the response with the necessary headers' do
-      client = TCPSocket.new '127.0.0.1', 10000
+      client = TCPSocket.new api_host, api_port
       client_spy = spy client
 
       response = Response.new client_spy
@@ -21,7 +21,7 @@ describe Response do
     it 'sends the response with the necessary headers' do
       allow(File).to receive(:read).and_return('<h1>Hello, world!</h1>')
 
-      client = TCPSocket.new '127.0.0.1', 10000
+      client = TCPSocket.new api_host, api_port
       client_spy = spy client
 
       response = Response.new client_spy
@@ -39,7 +39,7 @@ describe Response do
     it 'sends the response with the necessary headers' do
       allow(File).to receive(:read).and_return('<script>console.log("Loaded after the initial request")</script>')
 
-      client = TCPSocket.new '127.0.0.1', 10000
+      client = TCPSocket.new api_host, api_port
       client_spy = spy client
 
       response = Response.new client_spy
