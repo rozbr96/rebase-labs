@@ -1,0 +1,28 @@
+POST /upload HTTP/1.1
+Content-Length: 835
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryus8Jmg4IMQrUp2OI
+
+------WebKitFormBoundaryus8Jmg4IMQrUp2OI
+Content-Disposition: form-data; name="fields"
+
+cpf
+------WebKitFormBoundaryus8Jmg4IMQrUp2OI
+Content-Disposition: form-data; name="fields"
+
+nome paciente
+------WebKitFormBoundaryus8Jmg4IMQrUp2OI
+Content-Disposition: form-data; name="count"
+
+2
+------WebKitFormBoundaryus8Jmg4IMQrUp2OI
+Content-Disposition: form-data; name="overwrite"
+
+true
+------WebKitFormBoundaryus8Jmg4IMQrUp2OI
+Content-Disposition: form-data; name="file"; filename="tests_data.csv"
+Content-Type: text/csv
+
+cpf;nome paciente;email paciente;data nascimento paciente;endereço/rua paciente;cidade paciente;estado patiente;crm médico;crm médico estado;nome médico;email médico;token resultado exame;data exame;tipo exame;limites tipo exame;resultado tipo exame
+048.973.170-88;Emilly Batista Neto;gerald.crona@ebert-quigley.com;2001-03-11;165 Rua Rafaela;Ituverava;Alagoas;B000BJ20J4;PI;Maria Luiza Pires;denna@wisozk.biz;IQCZ17;2021-08-05;hemácias;45-52;97
+048.973.170-88;Emilly Batista Neto;gerald.crona@ebert-quigley.com;2001-03-11;165 Rua Rafaela;Ituverava;Alagoas;B000BJ20J4;PI;Maria Luiza Pires;denna@wisozk.biz;IQCZ17;2021-08-05;leucócitos;9-61;89
+------WebKitFormBoundaryus8Jmg4IMQrUp2OI--
