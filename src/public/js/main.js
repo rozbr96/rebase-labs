@@ -100,10 +100,33 @@ function loadTestsAndPopulateTable() {
 }
 
 
+function uploadFile() {
+  const fileElement = document.getElementById('file')
+  const file = fileElement.files[0]
+
+  const formData = new FormData()
+  formData.append('file', file)
+
+  fetch('/api/v1/upload', {
+    method: 'POST',
+    body: formData,
+  }).then(() => {
+    const divAlert = document.getElementById('alert')
+    divAlert.innerText = 'Upload realizado com sucesso!'
+
+    loadTestsAndPopulateTable()
+  })
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
   loadTestsAndPopulateTable()
-})
 
-document.getElementById('search-button').addEventListener('click', () => {
-  loadTestsAndPopulateTable()
+  document.getElementById('search-button').addEventListener('click', () => {
+    loadTestsAndPopulateTable()
+  })
+
+  document.getElementById('upload-button').addEventListener('click', () => {
+    uploadFile()
+  })
 })

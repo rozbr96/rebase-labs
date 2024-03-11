@@ -11,19 +11,20 @@
   <body>
     <h1 class="text-center">Lista de Exames Médicos</h1>
 
-    <form id="search-form">
-      <button
-        id="search-button"
-        type="button"
-      >
-        Buscar
-      </button>
+    <div id="forms-wrapper">
+      <form id="upload-form">
+        <label id="file-upload-label" for="file">Upload</label>
+        <input id="file" type="file" accept="text/csv" />
+        <button id="upload-button" type="button">Enviar</button>
+      </form>
 
-      <input
-        id="search-input"
-        placeholder="Busque exames através do TOKEN"
-      />
-    </form>
+      <div id="alert"></div>
+
+      <form id="search-form">
+        <input id="search-input" type="text" placeholder="Busque exames através do TOKEN"/>
+        <button id="search-button" type="button">Buscar</button>
+      </form>
+    </div>
 
     <table id="exams-table">
       <thead>

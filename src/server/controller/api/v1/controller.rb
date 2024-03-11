@@ -1,4 +1,6 @@
 
+require_relative '../../../../libs/importer'
+
 module Controller
   module API
     module V1
@@ -16,6 +18,14 @@ module Controller
         )
 
         response.json data: exams, status: :ok
+      end
+
+      def self.upload request, response
+        importer = Importer.new csv_filepath: request.file.path
+        importer.prepare_data
+        importer.save_all
+
+        response.json data: [], status: :ok
       end
     end
   end

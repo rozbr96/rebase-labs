@@ -27,18 +27,22 @@ table {
   text-align: right;
 }
 
-#search-form {
+form {
   display: flex;
-  flex-direction: row-reverse;
   margin: 10px;
 }
 
-#search-input {
+input[type="text"] {
   height: 30px;
   width: 20vw;
 }
 
-#search-button {
+button {
   margin-left: 10px;
   cursor: pointer;
+}
+
+#forms-wrapper {
+  display: flex;
+  justify-content: space-between;
 }
