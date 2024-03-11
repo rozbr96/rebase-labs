@@ -44,6 +44,8 @@ class Request
   end
 
   def parse_multipart_data multipart_data_text, content_type
+    return if multipart_data_text.empty?
+
     @data = Hash.new { |hash, key| hash[key] = [] }
 
     boundary = /boundary=(.*)(;|$)/.match(content_type).captures.first

@@ -53,6 +53,10 @@ describe 'API' do
         expect(exam['exam_type_limits']).to eq '45-52'
       end
     end
+
+    context 'POST /upload' do
+      xit 'fails to update data without a file' do; end
+    end
   end
 
   context 'V2' do

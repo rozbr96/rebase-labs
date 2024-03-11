@@ -3,6 +3,7 @@
 class Response
   MESSAGES = {
     :ok => '200 OK',
+    :bad_request => '400 BAD_REQUEST',
     :not_found => '404 NOT_FOUND',
   }
 

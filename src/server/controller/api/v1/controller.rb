@@ -21,6 +21,8 @@ module Controller
       end
 
       def self.upload request, response
+        return response.json data: [], status: :bad_request if request.file.nil?
+
         importer = Importer.new csv_filepath: request.file.path
         importer.prepare_data
         importer.save_all

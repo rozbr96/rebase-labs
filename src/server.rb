@@ -25,7 +25,6 @@ router.post '/api/v1/upload', Controller::API::V1.method(:upload)
 Socket.tcp_server_loop ENV['API_PORT'] do |client|
   request_text = client.recvmsg.first
 
-
   # TODO figure out whats happening
   next if request_text.lines.first.nil?
 

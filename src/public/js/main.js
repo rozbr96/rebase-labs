@@ -104,6 +104,8 @@ function uploadFile() {
   const fileElement = document.getElementById('file')
   const file = fileElement.files[0]
 
+  if (!file) return alert('É necessário selecionar um arquivo para o upload')
+
   const formData = new FormData()
   formData.append('file', file)
 
