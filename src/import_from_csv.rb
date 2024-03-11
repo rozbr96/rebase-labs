@@ -1,4 +1,6 @@
 
+require 'csv'
+
 require_relative 'db/postgres/connection'
 require_relative 'db/postgres/parser'
 
