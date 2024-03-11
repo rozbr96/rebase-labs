@@ -6,6 +6,13 @@ require_relative 'server/request.rb'
 require_relative 'server/controllers'
 
 
+class Socket
+  def puts content
+    super content rescue Errno::EPIPE
+  end
+end
+
+
 router = Router.new
 router.get '/', Controller::WEB.method(:index)
 router.get '/static/:static_file', Controller::WEB.method(:serve_static_file)
@@ -23,8 +30,7 @@ Socket.tcp_server_loop ENV['API_PORT'] do |client|
   next if request_text.lines.first.nil?
 
   unless request_text.lines.first.chomp.end_with? 'HTTP/1.1'
-    client.close
-    next
+    next client.close
   end
 
   router.route Request.new request_text:, client:

@@ -29,4 +29,8 @@ describe 'User visits the home page', type: :feature do
     expect(page).to have_content '45-52'
     expect(page).to have_content '9-61'
   end
+
+  it 'several times without apparent errors' do
+    5.times { visit root_url }
+  end
 end
