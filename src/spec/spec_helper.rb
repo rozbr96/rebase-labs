@@ -1,6 +1,7 @@
 
 require 'capybara/rspec'
 require_relative '../models'
+require_relative 'vars'
 
 Capybara.default_driver = :selenium_headless
 

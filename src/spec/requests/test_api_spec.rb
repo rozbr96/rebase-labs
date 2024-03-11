@@ -9,7 +9,7 @@ describe 'API' do
   context 'V1' do
     context 'GET /tests' do
       it 'success with empty results' do
-        uri = URI "http://localhost:#{ENV['API_PORT']}/api/v1/tests"
+        uri = URI api_v1_tests_url
         response = Net::HTTP.get_response uri
 
         expect(response.code).to eq '200'
@@ -25,7 +25,7 @@ describe 'API' do
         importer = Importer.new csv_filepath: filepath
         importer.prepare_data.save_all
 
-        uri = URI "http://localhost:#{ENV['API_PORT']}/api/v1/tests"
+        uri = URI api_v1_tests_url
         response = Net::HTTP.get_response uri
 
         expect(response.code).to eq '200'
@@ -58,7 +58,7 @@ describe 'API' do
   context 'V2' do
     context 'GET /tests' do
       it 'success with empty results' do
-        uri = URI "http://localhost:#{ENV['API_PORT']}/api/v2/tests"
+        uri = URI api_v2_tests_url
         response = Net::HTTP.get_response uri
 
         expect(response.code).to eq '200'
@@ -74,7 +74,7 @@ describe 'API' do
         importer = Importer.new csv_filepath: filepath
         importer.prepare_data.save_all
 
-        uri = URI "http://localhost:#{ENV['API_PORT']}/api/v2/tests"
+        uri = URI api_v2_tests_url
         response = Net::HTTP.get_response uri
 
         expect(response.code).to eq '200'

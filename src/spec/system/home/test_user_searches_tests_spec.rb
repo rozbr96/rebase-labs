@@ -6,7 +6,7 @@ describe 'User searches for tests', type: :feature do
     csv_raw_data = read_file_from_support 'tests_data.csv'
     Importer.new(csv_raw_data:).prepare_data.save_all
 
-    visit "http://127.0.0.1:#{ENV['API_PORT']}"
+    visit root_url
 
     within '#search-form' do
       fill_in 'search-input', with: 'NO_EXISTING_TOKEN'
@@ -20,7 +20,7 @@ describe 'User searches for tests', type: :feature do
     csv_raw_data = read_file_from_support 'tests_data.csv'
     Importer.new(csv_raw_data:).prepare_data.save_all
 
-    visit "http://127.0.0.1:#{ENV['API_PORT']}"
+    visit root_url
 
     within '#search-form' do
       fill_in 'search-input', with: 'IqcZ17'
