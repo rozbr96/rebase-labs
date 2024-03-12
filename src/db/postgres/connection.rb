@@ -7,10 +7,12 @@ class PGConnection
   PORT = ENV['DB_PORT']
 
   def self.execute sql_command
-    %x(
+    _, stdout, stderr, _ = Open3.popen3 %(
       PGPASSWORD=#{PASSWORD} psql -h #{HOST} \
         -U #{USERNAME} -d #{DB_NAME} -p #{PORT} \
         -c \"#{sql_command}\"
     )
+
+    [stdout.read, stderr.read]
   end
 end

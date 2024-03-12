@@ -70,12 +70,12 @@ class Model
       "#{field} = #{value}"
     end.join ' AND '
 
-    PGParser.parse_select_output PGConnection.execute %(
+    PGParser.parse_select_output PGConnection.execute(%(
       SELECT #{selected_fields}
       FROM #{self::TABLE_NAME}
       #{ joinings }
       #{"WHERE #{filters}" unless filters.empty?}
-    )
+    )).first
   end
 
   def self.where data
@@ -83,11 +83,11 @@ class Model
       "#{field} = #{escaped_value value}"
     end.join ' AND '
 
-    PGParser.parse_select_output PGConnection.execute %(
+    PGParser.parse_select_output PGConnection.execute(%(
       SELECT *
       FROM #{self::TABLE_NAME}
       WHERE #{filters}
-    )
+    )).first
   end
 
   private

@@ -1,6 +1,7 @@
 
 require 'csv'
 require 'json'
+require 'open3'
 require 'socket'
 require 'tempfile'
 require 'net/http'
