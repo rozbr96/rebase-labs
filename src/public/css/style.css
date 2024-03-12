@@ -1,6 +1,11 @@
 
+:root {
+  --primary-color: #2BCEE0;
+  --secondary-color: lightcyan;
+}
+
 body {
-  background-color: lightcyan;
+  background-color: var(--secondary-color);
 }
 
 table {
@@ -8,11 +13,11 @@ table {
 }
 
 .info {
-  background-color: #2BCEE0;
+  background-color: var(--primary-color);
 }
 
 .even {
-  background-color: lightcyan;
+  background-color: var(--secondary-color);
 }
 
 .text-center {
@@ -45,4 +50,72 @@ button {
 #forms-wrapper {
   display: flex;
   justify-content: space-between;
+}
+
+#upload-form {
+  display: flex;
+  vertical-align: center;
+  align-items: center;
+
+  width: 30vw;
+
+  & > * {
+    height: 30px;
+    padding: 0 5px;
+  }
+}
+
+#file-upload-label {
+  border: 3px solid var(--primary-color);
+  border-radius: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--primary-color);
+  }
+}
+
+#search-form {
+  width: 30vw;
+  justify-content: center;
+  align-items: center;
+
+  & > * {
+    height: 30px;
+  }
+}
+
+#checkbox-overwrite-wrapper {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin-bottom: 30px;
+
+  & > * {
+    cursor: pointer;
+  }
+
+  & > #overwrite-options-wrapper {
+    & > .overwrite-option {
+      cursor: pointer;
+      width: 100%;
+      padding: 5px;
+
+      &.selected {
+        background-color: var(--primary-color);
+      }
+
+      &:hover {
+        background-color: var(--primary-color);
+      }
+
+      &[data-value="unchecked"] {
+        border-radius: 10px 0 0 10px;
+      }
+
+      &[data-value="checked"] {
+        border-radius: 0 10px 10px 0;
+      }
+    }
+  }
 }

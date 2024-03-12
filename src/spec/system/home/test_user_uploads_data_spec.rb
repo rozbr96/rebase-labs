@@ -22,7 +22,7 @@ describe 'User visits the home page', type: :feature do
     visit root_url
 
     within '#upload-form' do
-      uncheck 'Sobrescrever dados existentes'
+      page.find('label[data-value="unchecked"]').click
 
       attach_file get_filepath_for 'tests_data.csv' do
         page.find('#file-upload-label').click
@@ -33,7 +33,7 @@ describe 'User visits the home page', type: :feature do
 
     expect(page).to have_content 'Upload realizado com sucesso!'
     expect(page).not_to have_content 'Nenhum registro para ser exibido!'
-    expect(page.all('tbody > tr').to_a.count).to eq 4
+    expect(page.all('tbody > tr').count).to eq 4
   end
 
   it 'and uploads a file succesfully, erasing the previous data' do
@@ -43,7 +43,7 @@ describe 'User visits the home page', type: :feature do
     visit root_url
 
     within '#upload-form' do
-      check 'Sobrescrever dados existentes'
+      page.find('label[data-value="checked"]').click
 
       attach_file get_filepath_for 'tests_data.csv' do
         page.find('#file-upload-label').click
@@ -54,7 +54,7 @@ describe 'User visits the home page', type: :feature do
 
     expect(page).to have_content 'Upload realizado com sucesso!'
     expect(page).not_to have_content 'Nenhum registro para ser exibido!'
-    expect(page.all('tbody > tr').to_a.count).to eq 2
+    expect(page.all('tbody > tr').count).to eq 2
   end
 
   it 'and tries to upload without a file being attached' do

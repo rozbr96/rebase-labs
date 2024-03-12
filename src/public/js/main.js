@@ -134,4 +134,31 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('upload-button').addEventListener('click', () => {
     uploadFile()
   })
+
+  document.getElementById('overwrite-checkbox').addEventListener('change', function() {
+    const state = this.checked ? 'checked' : 'unchecked'
+
+    document.querySelectorAll('.overwrite-option').forEach(element => {
+      if (element.getAttribute('data-value') === state)
+        element.classList.add('selected')
+      else
+        element.classList.remove('selected')
+    })
+  })
+
+  document.querySelectorAll('.overwrite-option').forEach(element => {
+    element.addEventListener('click', function() {
+      const checkbox = document.getElementById('overwrite-checkbox')
+      const newState = this.getAttribute('data-value')
+      const newValue = newState === 'checked'
+      const oldValue = checkbox.checked
+
+      checkbox.checked = newValue
+
+      if (newValue != oldValue) {
+        const changeEvent = new Event('change')
+        checkbox.dispatchEvent(changeEvent)
+      }
+    })
+  })
 })

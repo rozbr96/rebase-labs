@@ -13,11 +13,21 @@
 
     <div id="forms-wrapper">
       <form id="upload-form">
-        <label id="file-upload-label" for="file">Upload</label>
-        <input id="file" type="file" accept="text/csv" />
+        <label id="file-upload-label" for="file">Selecione um arquivo</label>
+        <input hidden id="file" type="file" accept="text/csv" />
 
-        <label for="overwrite-checkbox">Sobrescrever dados existentes</label>
-        <input type="checkbox" id="overwrite-checkbox"/>
+        <div id="checkbox-overwrite-wrapper">
+          <label for="overwrite-checkbox">Sobrescrever?</label>
+
+          &nbsp;
+
+          <div id="overwrite-options-wrapper">
+            <label class="overwrite-option selected" data-value="unchecked">NÃO</label>
+            <label class="overwrite-option" data-value="checked">SIM</label>
+          </div>
+
+          <input hidden type="checkbox" id="overwrite-checkbox"/>
+        </div>
 
         <button id="upload-button" type="button">Enviar</button>
       </form>
