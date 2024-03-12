@@ -12,36 +12,13 @@ class Importer
 
     @columns = @rows.shift
 
-    @doctors = []
-    @exams = []
-    @exam_types = []
-    @patients = []
+    clear_data
   end
 
   def prepare_data
-    @exams = []
-    patients_data = {}
-    doctors_data = {}
-    exam_types_data = {}
-
-    @rows.each do |row|
-      row_data = DataExtractor.get_row_data @columns, row
-
-      patient_data = DataExtractor.get_patient_data row_data
-      patients_data[patient_data[:citizen_id_number]] = patient_data
-
-      doctor_data = DataExtractor.get_doctor_data row_data
-      doctors_data["#{doctor_data[:crm]}_#{doctor_data[:state]}"] = doctor_data
-
-      exam_type_data = DataExtractor.get_exam_type_data row_data
-      exam_types_data[exam_type_data[:name]] = exam_type_data
-
-      @exams.push DataExtractor.get_exam_data row_data
-    end
-
-    @patients = patients_data.values
-    @doctors = doctors_data.values
-    @exam_types = exam_types_data.values
+    clear_data
+    set_initial_data
+    remove_duplicated_data
 
     self
   end
@@ -54,6 +31,20 @@ class Importer
   end
 
   private
+
+  def clear_data
+    @exams = []
+    @doctors = []
+    @exam_types = []
+    @patients = []
+  end
+
+  def remove_duplicated_data
+    @exams.uniq!
+    @doctors.uniq!
+    @exam_types.uniq!
+    @patients.uniq!
+  end
 
   def save_doctors
     until @doctors.empty?
@@ -80,6 +71,17 @@ class Importer
   def save_patients
     until @patients.empty?
       Patient.create_multiple @patients.shift BATCH_SIZE
+    end
+  end
+
+  def set_initial_data
+    @rows.each do |row|
+      row_data = DataExtractor.get_row_data @columns, row
+
+      @patients.push DataExtractor.get_patient_data row_data
+      @doctors.push DataExtractor.get_doctor_data row_data
+      @exam_types.push DataExtractor.get_exam_type_data row_data
+      @exams.push DataExtractor.get_exam_data row_data
     end
   end
 end

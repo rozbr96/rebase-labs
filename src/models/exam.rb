@@ -16,10 +16,7 @@ class Exam < Model
   private
 
   def self.v2_data rows
-    dates = {}
-    doctors = {}
-    patients = {}
-    tokens = []
+    dates, doctors, patients, tokens = {}, {}, {}, []
     tests = Hash.new { |hash, key| hash[key] = [] }
 
     rows.each do |row_data|
@@ -31,15 +28,17 @@ class Exam < Model
       tokens << token
     end
 
-    tokens.uniq.map do |token|
-      {
-        :patient => patients[token],
-        :doctor => doctors[token],
-        :tests => tests[token],
-        :date => dates[token],
-        :result_token => token
-      }
-    end
+    tokens.uniq.map { |token| tests_final_data token, patients, doctors, tests, dates }
+  end
+
+  def self.tests_final_data token, patients, doctors, tests, dates
+    {
+      :patient => patients[token],
+      :doctor => doctors[token],
+      :tests => tests[token],
+      :date => dates[token],
+      :result_token => token
+    }
   end
 
   def self.get_doctor_data row_data

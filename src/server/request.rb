@@ -6,7 +6,7 @@ class Request
     @params = {}
     @client = client
 
-    headers_text, body_text = request_text.split(/\r?\n\r?\n/, 2)
+    headers_text, @body_text = request_text.split(/\r?\n\r?\n/, 2)
     headers_text = headers_text.split(/\r?\n/)
 
     @method, @path, _ = headers_text.shift.split
@@ -14,14 +14,7 @@ class Request
 
     @headers = parsed_headers headers_text
 
-    case @headers['content-type']
-    when /application\/json/
-      @data = JSON.parse(%(#{body_text}))
-    when /multipart\/form-data/
-      parse_multipart_data body_text, @headers['content-type']
-    else
-      @data = body_text
-    end
+    parse_body
   end
 
   def set_params match_data
@@ -31,6 +24,31 @@ class Request
   end
 
   private
+
+  def parse_multipart_part multipart_part
+    headers, content = multipart_part.split(/\r?\n\r?\n/, 2).map(&:strip)
+
+    headers = parsed_headers headers
+
+    disposition = headers['content-disposition']
+    varname = disposition.match(/name="(.*)"($|;)/).captures.first
+
+    return @data[varname] << (JSON.parse(content) rescue content) unless headers['content-type']
+
+    filename = disposition.match(/filename="(.*)"($|;)/).captures.first
+    save_file filename, content
+  end
+
+  def parse_body
+    case @headers['content-type']
+    when /application\/json/
+      @data = JSON.parse %(#{@body_text})
+    when /multipart\/form-data/
+      parse_multipart_data @body_text, @headers['content-type']
+    else
+      @data = @body_text
+    end
+  end
 
   def parsed_headers headers_text
     headers_text = headers_text.strip.split(/\r?\n/) if headers_text.kind_of? String
@@ -52,28 +70,13 @@ class Request
 
     multipart_part_parts = multipart_data_text.match(regex).captures.first.split boundary
     multipart_part_parts.each do |multipart_part|
-      headers, content = multipart_part.split(/\r?\n\r?\n/, 2)
-
-      headers = parsed_headers headers
-      content = content.strip
-
-      disposition = headers['content-disposition']
-      if headers['content-type']
-        filename = disposition.match(/filename="(.*)"($|;)/).captures.first
-        @file = Tempfile.new filename
-        @file.write content
-        @file.rewind
-      else
-        varname = disposition.match(/name="(.*)"($|;)/).captures.first
-
-        value = begin
-          JSON.parse content
-        rescue
-          content
-        end
-
-        @data[varname] << value
-      end
+      parse_multipart_part multipart_part
     end
+  end
+
+  def save_file filename, content
+    @file = Tempfile.new filename
+    @file.write content
+    @file.rewind
   end
 end
