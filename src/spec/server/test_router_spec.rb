@@ -20,9 +20,13 @@ describe Router do
 
   describe '#route' do
     it 'calls the right handler' do
-      request_text = read_file_from_support 'request_text.txt'
+      request_text = read_file_from_support 'simple_request/headers.txt'
+      body_text = read_file_from_support 'simple_request/body.txt'
 
-      request = Request.new request_text:, client: nil
+      client, helper = IO.pipe
+      helper.puts body_text
+
+      request = Request.new client:, headers_lines: request_text.lines
 
       spy_object = spy(10, :to_s => true, :methods => true)
 
@@ -37,8 +41,7 @@ describe Router do
 
     it 'calls the right handler with named parameters' do
       request_text = read_file_from_support 'request_with_mult_levels_text.txt'
-
-      request = Request.new request_text:, client: nil
+      request = Request.new headers_lines: request_text.lines, client: nil
 
       spy_object = spy(10, :to_s => true, :methods => true)
 

@@ -2,17 +2,14 @@
 class Request
   attr_reader :method, :path, :headers, :data, :client, :params, :file
 
-  def initialize request_text:, client:
+  def initialize headers_lines:, client:
     @params = {}
     @client = client
 
-    headers_text, @body_text = request_text.split(/\r?\n\r?\n/, 2)
-    headers_text = headers_text.split(/\r?\n/)
-
-    @method, @path, _ = headers_text.shift.split
+    @method, @path, _ = headers_lines.shift.split
     @method.downcase!
 
-    @headers = parsed_headers headers_text
+    @headers = parsed_headers headers_lines
 
     parse_body
   end
@@ -40,21 +37,25 @@ class Request
   end
 
   def parse_body
+    return unless @headers['content-length']
+
+    body_text = @client.read @headers['content-length'].to_i
+
     case @headers['content-type']
     when /application\/json/
-      @data = JSON.parse %(#{@body_text})
+      @data = JSON.parse %(#{body_text})
     when /multipart\/form-data/
-      parse_multipart_data @body_text, @headers['content-type']
+      parse_multipart_data body_text, @headers['content-type']
     else
-      @data = @body_text
+      @data = body_text
     end
   end
 
   def parsed_headers headers_text
-    headers_text = headers_text.strip.split(/\r?\n/) if headers_text.kind_of? String
+    headers_text = headers_text.strip.split(/\r?\n/) if headers_text.is_a? String
     headers_text.reduce({}) do |headers, line|
       key, value = line.split ': ', 2
-      headers.update key.downcase => value
+      headers.update key.downcase => value.chomp
     end
   end
 
@@ -67,6 +68,9 @@ class Request
     boundary = "--#{boundary}"
 
     regex = Regexp.new "#{boundary}(.*)#{boundary}--", Regexp::MULTILINE
+
+    # require 'byebug'
+    # byebug
 
     multipart_part_parts = multipart_data_text.match(regex).captures.first.split boundary
     multipart_part_parts.each do |multipart_part|

@@ -3,9 +3,13 @@ describe Request do
   describe 'initialize' do
     context 'parsed values' do
       it 'parses the requests values succesfully' do
-        request_text = read_file_from_support 'request_text.txt'
+        headers_text = read_file_from_support 'simple_request/headers.txt'
+        body_text = read_file_from_support 'simple_request/body.txt'
 
-        request = Request.new request_text:, client: nil
+        client, helper = IO.pipe
+        helper.puts body_text
+
+        request = Request.new client:, headers_lines: headers_text.lines
 
         expect(request.method).to eq 'get'
 
@@ -23,15 +27,19 @@ describe Request do
       end
 
       it 'parses multipart forms successfully' do
-        request_text = read_file_from_support 'post_upload_request.txt'
         csv_raw_data = read_file_from_support 'tests_data.csv'
+        headers_text = read_file_from_support 'upload_request/headers.txt'
+        body_text = read_file_from_support 'upload_request/body.txt'
 
-        request = Request.new request_text:, client: nil
+        client, helper = IO.pipe
+        helper.puts body_text
+
+        request = Request.new client:, headers_lines: headers_text.lines
 
         expect(request.method).to eq 'post'
         expect(request.path).to eq '/upload'
 
-        expect(request.headers['content-length']).to eq '835'
+        expect(request.headers['content-length']).to eq '1208'
         expect(request.headers['content-type']).to match 'multipart/form-data'
 
         expect(request.file).not_to be_nil

@@ -19,14 +19,17 @@ router.post '/api/v1/upload', Controller::API::V1.method(:upload)
 
 
 Socket.tcp_server_loop ENV['API_PORT'] do |client|
-  request_text = client.recvmsg.first
+  Thread.new {
+    headers_lines = []
 
-  # TODO figure out whats happening
-  next if request_text.lines.first.nil?
+    while line = client.gets
+      break if line.strip.empty?
 
-  unless request_text.lines.first.chomp.end_with? 'HTTP/1.1'
-    next client.close
-  end
+      headers_lines << line
+    end
 
-  router.route Request.new request_text:, client:
+    next client.close unless headers_lines.first&.chomp&.end_with? 'HTTP/1.1'
+
+    router.route Request.new headers_lines:, client:
+  }
 end
