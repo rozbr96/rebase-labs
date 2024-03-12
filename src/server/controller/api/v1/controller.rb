@@ -11,9 +11,15 @@ module Controller
       def self.upload request, response
         return response.json data: [], status: :bad_request if request.file.nil?
 
+        if request.data['overwrite']&.first == true
+          Exam.delete_all
+          ExamType.delete_all
+          Doctor.delete_all
+          Patient.delete_all
+        end
+
         importer = Importer.new csv_filepath: request.file.path
-        importer.prepare_data
-        importer.save_all
+        importer.prepare_data.save_all
 
         response.json data: [], status: :ok
       end

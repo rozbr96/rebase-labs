@@ -106,8 +106,11 @@ function uploadFile() {
 
   if (!file) return alert('É necessário selecionar um arquivo para o upload')
 
+  const checkboxElement = document.getElementById('overwrite-checkbox')
+
   const formData = new FormData()
   formData.append('file', file)
+  formData.append('overwrite', checkboxElement.checked)
 
   fetch('/api/v1/upload', {
     method: 'POST',
