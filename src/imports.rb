@@ -6,6 +6,7 @@ require 'socket'
 require 'tempfile'
 require 'net/http'
 
+require_relative 'db/postgres/regexes'
 require_relative 'db/postgres/connection'
 require_relative 'db/postgres/parser'
 
