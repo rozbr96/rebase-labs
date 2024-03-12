@@ -33,8 +33,9 @@ describe Router do
       router = Router.new
       router.post '/users', spy_object.method(:methods)
       router.get '/users', spy_object.method(:to_s)
-      router.route request
+      routed = router.route request
 
+      expect(routed).to eq true
       expect(spy_object).not_to have_received :methods
       expect(spy_object).to have_received :to_s
     end
@@ -48,12 +49,23 @@ describe Router do
       router = Router.new
       router.post '/users/:user_id/posts', spy_object.method(:methods)
       router.get '/users/:user_id/posts/:post_id', spy_object.method(:to_s)
-      router.route request
+      routed = router.route request
 
+      expect(routed).to eq true
       expect(request.params['user_id']).to eq '10'
       expect(request.params['post_id']).to eq '3'
       expect(spy_object).not_to have_received :methods
       expect(spy_object).to have_received :to_s
+    end
+
+    it 'returns false cause no path was matched' do
+      request_text = read_file_from_support 'request_with_mult_levels_text.txt'
+      request = Request.new headers_lines: request_text.lines, client: nil
+
+      router = Router.new
+      routed = router.route request
+
+      expect(routed).to eq false
     end
   end
 end

@@ -30,6 +30,11 @@ Socket.tcp_server_loop ENV['API_PORT'] do |client|
 
     next client.close unless headers_lines.first&.chomp&.end_with? 'HTTP/1.1'
 
-    router.route Request.new headers_lines:, client:
+    routed = router.route Request.new(headers_lines:, client:)
+
+    unless routed
+      client.puts 'HTTP/1.1 404 NOT_FOUND'
+      client.close
+    end
   }
 end

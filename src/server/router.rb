@@ -15,8 +15,10 @@ class Router
 
       route.handler.call request, response
 
-      break
+      return true
     end
+
+    false
   end
 
   def get path, handler
