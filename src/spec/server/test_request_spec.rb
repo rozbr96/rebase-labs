@@ -26,6 +26,15 @@ describe Request do
         expect(request.data['height_in_cm']).to eq 169
       end
 
+      it 'parses the query string successfully' do
+        request_text = read_file_from_support 'request_with_mult_levels_text.txt'
+        request = Request.new headers_lines: request_text.lines, client: nil
+
+        expect(request.params).not_to be_empty
+        expect(request.params['mode']).to eq 'legacy'
+        expect(request.params['equal_sign']).to eq '='
+      end
+
       it 'parses multipart forms successfully' do
         csv_raw_data = read_file_from_support 'tests_data.csv'
         headers_text = read_file_from_support 'upload_request/headers.txt'

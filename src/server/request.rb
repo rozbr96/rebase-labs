@@ -11,16 +11,32 @@ class Request
 
     @headers = parsed_headers headers_lines
 
+    parse_query_string
     parse_body
   end
 
   def set_params match_data
     return if match_data.nil?
 
-    @params = match_data.named_captures
+    @params.merge! match_data.named_captures
   end
 
   private
+
+  def parse_query_string
+    path, query_string = @path.split('?', 2)
+    @path = path
+
+    return if query_string.nil?
+
+    query_string.split('&').each do |key_value|
+      key, value = key_value.split('=', 2)
+
+      next if key.empty?
+
+      @params.update key => value
+    end
+  end
 
   def parse_multipart_part multipart_part
     headers, content = multipart_part.split(/\r?\n\r?\n/, 2).map(&:strip)

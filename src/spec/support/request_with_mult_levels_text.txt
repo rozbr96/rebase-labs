@@ -1,1 +1,1 @@
-GET /users/10/posts/3 HTTP/1.1
+GET /users/10/posts/3?mode=legacy&equal_sign== HTTP/1.1
