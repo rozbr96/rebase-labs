@@ -6,7 +6,7 @@ module Controller
         exam = Exam.select(
           joins: tests_joinings,
           fields_selection: tests_fields_selection,
-          where: where_data(request),
+          where: tests_where_data(request),
           version: 'V2'
         ).first
 
@@ -25,14 +25,6 @@ module Controller
         response.json data: exams, status: :ok
       end
 
-      def self.tests_joinings
-        {
-          Doctor => %w[doctor_id id],
-          Patient => %w[patient_id id],
-          ExamType => %w[exam_type_id id],
-        }
-      end
-
       def self.tests_fields_selection
         {
           Exam => %w[id date result token_result],
@@ -42,12 +34,38 @@ module Controller
         }
       end
 
-      def self.where_data request
+      def self.tests_joinings
+        {
+          Doctor => %w[doctor_id id],
+          Patient => %w[patient_id id],
+          ExamType => %w[exam_type_id id],
+        }
+      end
+
+      def self.tests_where_data request
         {
           'exam.token_result': {
             :value => request.params['token'],
             :ignore_case => true,
           },
+        }
+      end
+
+      def self.upload request, response
+        return response.json data: [], status: :bad_request if request.file.nil?
+
+        response.json data: [], status: :ok
+
+        Thread.new {
+          if request.data['overwrite']&.first == true
+            Exam.delete_all
+            ExamType.delete_all
+            Doctor.delete_all
+            Patient.delete_all
+          end
+
+          importer = Importer.new csv_filepath: request.file.path
+          importer.prepare_data.save_all
         }
       end
     end

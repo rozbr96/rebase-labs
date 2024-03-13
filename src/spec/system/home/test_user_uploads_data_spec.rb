@@ -1,6 +1,6 @@
 
 describe 'User visits the home page', type: :feature do
-  context 'with the legacy flag' do
+  context 'with the legacy flag (sync)' do
     it 'and uploads a file succesfully' do
       visit root_url params: { mode: 'legacy' }
 
@@ -12,7 +12,7 @@ describe 'User visits the home page', type: :feature do
         click_on 'Enviar'
       end
 
-      expect(page).to have_content 'Upload realizado com sucesso!'
+      expect(page).to have_content 'Dados importados com sucesso!'
       expect(page).not_to have_content 'Nenhum registro para ser exibido!'
     end
 
@@ -32,7 +32,7 @@ describe 'User visits the home page', type: :feature do
         click_on 'Enviar'
       end
 
-      expect(page).to have_content 'Upload realizado com sucesso!'
+      expect(page).to have_content 'Dados importados com sucesso!'
       expect(page).not_to have_content 'Nenhum registro para ser exibido!'
       expect(page.all('tbody > tr').count).to eq 4
     end
@@ -53,9 +53,27 @@ describe 'User visits the home page', type: :feature do
         click_on 'Enviar'
       end
 
-      expect(page).to have_content 'Upload realizado com sucesso!'
+      expect(page).to have_content 'Dados importados com sucesso!'
       expect(page).not_to have_content 'Nenhum registro para ser exibido!'
       expect(page.all('tbody > tr').count).to eq 2
+    end
+  end
+
+  context 'without the legacy flag (async, the default)' do
+    it 'and uploads a file succesfully' do
+      visit root_url
+
+      within '#upload-form' do
+        attach_file get_filepath_for 'tests_data.csv' do
+          page.find('#file-upload-label').click
+        end
+
+        click_on 'Enviar'
+      end
+
+      expect(page).to have_content 'Upload realizado com sucesso!'
+      expect(page).to have_content 'Dados estão sendo processados...'
+      expect(page).to have_content 'Nenhum registro para ser exibido!'
     end
   end
 

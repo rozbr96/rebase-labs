@@ -6,6 +6,7 @@
 - [Version 2](#v2)
   - [GET /tests](#get-apiv2tests)
   - [GET /tests/:token](#get-apiv2teststoken)
+  - [POST /upload](#post-apiv2upload)
 - [Notes](#notes)
 
 
@@ -78,7 +79,7 @@ curl -F file=@data.csv -F overwrite=true http://localhost:10000/api/v1/upload
 Response:
 For now, the api only returns a successful response, regardless if data errors (like duplicated or missing key) were encoutered processing the data.
 
-Also, the importing process is being made **synchronously**. The V2 version will process it asynchronously.
+Also, the importing process is done **synchronously**. The [V2](#post-apiv2upload) version process it asynchronously.
 
 ### V2
 
@@ -370,6 +371,13 @@ curl http://localhost:10000/api/v2/tests/0w9i67
 ```
 
 </details>
+
+
+#### POST /api/v2/upload
+
+Same as [V1](#post-apiv1upload), but the importing process is done **asynchronously**.
+
+Soon you will be able to access a list with the importing history.
 
 <br>
 

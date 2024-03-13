@@ -99,21 +99,29 @@ function loadTestsAndPopulateTable() {
     })
 }
 
-
-function getUploadUrl() {
+function legacyModeEnabled() {
   const url = new URL(document.URL)
 
   return url.searchParams.get('mode') === 'legacy'
+}
+
+function getSuccessMessage(inLegacyMode) {
+  return inLegacyMode
+    ? 'Dados importados com sucesso!'
+    : 'Upload realizado com sucesso!\n\nDados estão sendo processados...'
+}
+
+function getUploadUrl(inLegacyMode) {
+  return inLegacyMode
     ? '/api/v1/upload'
     : '/api/v2/upload'
 }
 
-
-function uploadFile() {
+function getFormData() {
   const fileElement = document.getElementById('file')
   const file = fileElement.files[0]
 
-  if (!file) return alert('É necessário selecionar um arquivo para o upload')
+  if (!file) return null
 
   const checkboxElement = document.getElementById('overwrite-checkbox')
 
@@ -121,14 +129,28 @@ function uploadFile() {
   formData.append('file', file)
   formData.append('overwrite', checkboxElement.checked)
 
-  fetch(getUploadUrl(), {
+  return formData
+}
+
+
+function uploadFile() {
+  const formData = getFormData()
+
+  if (!formData) return alert('É necessário selecionar um arquivo para o upload')
+
+  const inLegacyMode = legacyModeEnabled()
+  fetch(getUploadUrl(inLegacyMode), {
     method: 'POST',
     body: formData,
-  }).then(() => {
+  }).then((response) => {
     const divAlert = document.getElementById('alert')
-    divAlert.innerText = 'Upload realizado com sucesso!'
 
-    loadTestsAndPopulateTable()
+    if (response.status != 200)
+      return divAlert.innerText = 'Erro ao enviar arquivo!'
+
+    divAlert.innerText = getSuccessMessage(inLegacyMode)
+
+    if (inLegacyMode) loadTestsAndPopulateTable()
   })
 }
 
