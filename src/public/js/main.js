@@ -100,6 +100,15 @@ function loadTestsAndPopulateTable() {
 }
 
 
+function getUploadUrl() {
+  const url = new URL(document.URL)
+
+  return url.searchParams.get('mode') === 'legacy'
+    ? '/api/v1/upload'
+    : '/api/v2/upload'
+}
+
+
 function uploadFile() {
   const fileElement = document.getElementById('file')
   const file = fileElement.files[0]
@@ -112,7 +121,7 @@ function uploadFile() {
   formData.append('file', file)
   formData.append('overwrite', checkboxElement.checked)
 
-  fetch('/api/v1/upload', {
+  fetch(getUploadUrl(), {
     method: 'POST',
     body: formData,
   }).then(() => {
