@@ -3,6 +3,10 @@ class Model
   TABLE_NAME = ''
   TABLE_COLUMNS = []
 
+  def self.all
+    where({})
+  end
+
   def self.create data, foreign_keys: {}
     create_multiple [data], foreign_keys:
   end
@@ -86,7 +90,7 @@ class Model
     PGParser.parse_select_output PGConnection.execute(%(
       SELECT *
       FROM #{self::TABLE_NAME}
-      WHERE #{filters}
+      #{"WHERE #{filters}" unless filters.empty?}
     )).first
   end
 

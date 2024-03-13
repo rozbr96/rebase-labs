@@ -64,4 +64,28 @@ describe Importer do
       expect(second_exam[:token_result]).to eq 'IQCZ17'
     end
   end
+
+  describe '#save_all' do
+    it 'saves the data successfully' do
+      csv_filepath = get_filepath_for 'tests_data.csv'
+      importer = Importer.new(csv_filepath:).prepare_data
+
+      imported_doctors_count = importer.doctors.count
+      importer_patients_count = importer.patients.count
+      importer_exams_count = importer.exams.count
+      importer_exam_types_count = importer.exam_types.count
+
+      importer.save_all
+
+      expect(importer.doctors.count).to eq 0
+      expect(importer.patients.count).to eq 0
+      expect(importer.exams.count).to eq 0
+      expect(importer.exam_types.count).to eq 0
+
+      expect(imported_doctors_count).to eq Doctor.all.count
+      expect(importer_patients_count).to eq Patient.all.count
+      expect(importer_exams_count).to eq Exam.all.count
+      expect(importer_exam_types_count).to eq ExamType.all.count
+    end
+  end
 end
