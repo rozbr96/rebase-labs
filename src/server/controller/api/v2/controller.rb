@@ -19,6 +19,8 @@ module Controller
         exams = Exam.select(
           joins: tests_joinings,
           fields_selection: tests_fields_selection,
+          offset: request.params['offset'],
+          limit: request.params['limit'],
           version: 'V2'
         )
 

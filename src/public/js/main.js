@@ -1,4 +1,9 @@
 
+const __paginationData = {
+  offset: 0,
+  limit: 1000
+}
+
 const formatDate = (date) => date.split('-').reverse().join('/')
 
 const doctorFields = ['name', 'crm', 'email']
@@ -80,9 +85,10 @@ function clearTable() {
 
 function loadTestsAndPopulateTable() {
   const searchInput = document.getElementById('search-input')
+  const queryString = getQueryString()
   const url = searchInput.value
     ? `/api/v2/tests/${searchInput.value}`
-    : '/api/v2/tests'
+    : `/api/v2/tests?${queryString}`
 
   fetch(url)
     .then(async (resp) => {
@@ -109,6 +115,12 @@ function getSuccessMessage(inLegacyMode) {
   return inLegacyMode
     ? 'Dados importados com sucesso!'
     : 'Upload realizado com sucesso!\n\nDados estão sendo processados...'
+}
+
+function getQueryString() {
+  return Object.keys(__paginationData).map(key => {
+    return `${key}=${__paginationData[key]}`
+  }).join('&')
 }
 
 function getUploadUrl(inLegacyMode) {
@@ -166,8 +178,8 @@ document.addEventListener('DOMContentLoaded', () => {
     uploadFile()
   })
 
-  document.getElementById('overwrite-checkbox').addEventListener('change', function() {
-    const state = this.checked ? 'checked' : 'unchecked'
+  document.getElementById('overwrite-checkbox').addEventListener('change', (event) => {
+    const state = event.target.checked ? 'checked' : 'unchecked'
 
     document.querySelectorAll('.overwrite-option').forEach(element => {
       if (element.getAttribute('data-value') === state)
@@ -177,10 +189,45 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   })
 
+  document.getElementById('go-to-first-page-button').addEventListener('click', (event) => {
+    __paginationData.offset = 0
+
+    event.target.classList.add('hidden')
+
+    loadTestsAndPopulateTable()
+  })
+
+  document.getElementById('go-to-previous-page-button').addEventListener('click', () => {
+    __paginationData.offset -= __paginationData.limit
+
+    if (__paginationData.offset < 0) __paginationData.offset = 0
+
+    if (__paginationData.offset === 0)
+      document.getElementById('go-to-first-page-button').classList.add('hidden')
+
+    loadTestsAndPopulateTable()
+  })
+
+  document.getElementById('go-to-next-page-button').addEventListener('click', () => {
+    __paginationData.offset += __paginationData.limit
+
+    document.getElementById('go-to-first-page-button').classList.remove('hidden')
+
+    loadTestsAndPopulateTable()
+  })
+
+  document.getElementById('items-per-page-select').addEventListener('change', (event) => {
+    __paginationData.limit = Number.parseInt(event.target.value || 0)
+
+    document.getElementById('search-input').value = ''
+
+    loadTestsAndPopulateTable()
+  })
+
   document.querySelectorAll('.overwrite-option').forEach(element => {
-    element.addEventListener('click', function() {
+    element.addEventListener('click', (event) => {
       const checkbox = document.getElementById('overwrite-checkbox')
-      const newState = this.getAttribute('data-value')
+      const newState = event.target.getAttribute('data-value')
       const newValue = newState === 'checked'
       const oldValue = checkbox.checked
 

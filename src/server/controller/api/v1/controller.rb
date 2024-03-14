@@ -3,7 +3,12 @@ module Controller
   module API
     module V1
       def self.tests request, response
-        exams = Exam.select joins: tests_joinings, fields_selection: tests_fields_selection
+        exams = Exam.select(
+          joins: tests_joinings,
+          fields_selection: tests_fields_selection,
+          offset: request.params['offset'],
+          limit: request.params['limit'],
+        )
 
         response.json data: exams, status: :ok
       end

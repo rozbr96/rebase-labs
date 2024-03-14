@@ -44,4 +44,19 @@ describe 'API V1 GET /tests' do
     expect(exam['exam_type_name']).to eq 'hemácias'
     expect(exam['exam_type_limits']).to eq '45-52'
   end
+
+  it 'succeeds with a limited number of results' do
+    filepath = get_filepath_for 'multiple_tests_data.csv'
+    importer = Importer.new csv_filepath: filepath
+    importer.prepare_data.save_all
+
+    uri = URI api_v1_tests_url params: { offset: 1, limit: 4 }
+    response = Net::HTTP.get_response uri
+
+    expect(response.code).to eq '200'
+    expect(response.content_type).to eq 'application/json'
+
+    json_response = JSON.parse response.body
+    expect(json_response.count).to eq 4
+  end
 end

@@ -13,7 +13,7 @@ describe 'API V2 GET /tests' do
   end
 
   it 'succeeds with some results' do
-    filepath = get_filepath_for 'tests_data.csv'
+    filepath = get_filepath_for 'multiple_tests_data.csv'
     importer = Importer.new csv_filepath: filepath
     importer.prepare_data.save_all
 
@@ -24,7 +24,7 @@ describe 'API V2 GET /tests' do
     expect(response.content_type).to eq 'application/json'
 
     json_response = JSON.parse response.body
-    expect(json_response.count).to eq 1
+    expect(json_response.count).to eq 4
 
     data = json_response.first
 
@@ -54,5 +54,20 @@ describe 'API V2 GET /tests' do
 
     expect(data['date']).to eq '2021-08-05'
     expect(data['result_token']).to eq 'IQCZ17'
+  end
+
+  it 'succeeds with a limited number of results' do
+    filepath = get_filepath_for 'multiple_tests_data.csv'
+    importer = Importer.new csv_filepath: filepath
+    importer.prepare_data.save_all
+
+    uri = URI api_v2_tests_url params: { offset: 1, limit: 4 }
+    response = Net::HTTP.get_response uri
+
+    expect(response.code).to eq '200'
+    expect(response.content_type).to eq 'application/json'
+
+    json_response = JSON.parse response.body
+    expect(json_response.count).to eq 3
   end
 end

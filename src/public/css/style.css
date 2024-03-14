@@ -42,6 +42,7 @@ input[type="text"] {
   width: 20vw;
 }
 
+select,
 button {
   margin-left: 10px;
   cursor: pointer;
@@ -118,4 +119,14 @@ button {
       }
     }
   }
+}
+
+#paginator {
+  position: fixed;
+  top: 90vh;
+  right: 5vw;
+}
+
+.hidden {
+  display: none;
 }

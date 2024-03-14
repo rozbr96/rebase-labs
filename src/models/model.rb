@@ -49,7 +49,7 @@ class Model
     where(data).first
   end
 
-  def self.select joins:, fields_selection:, where: {}
+  def self.select joins:, fields_selection:, where: {}, offset: nil, limit: nil
     selected_fields = fields_selection.each_pair.map do |model, fields|
       fields.map do |field|
         "#{model::TABLE_NAME}.#{field} #{model::TABLE_NAME}_#{field}"
@@ -78,7 +78,10 @@ class Model
       SELECT #{selected_fields}
       FROM #{self::TABLE_NAME}
       #{ joinings }
-      #{"WHERE #{filters}" unless filters.empty?}
+      #{ "WHERE #{filters}" unless filters.empty? }
+      ORDER BY #{self::TABLE_NAME}.id
+      #{ "OFFSET #{offset}" if /\d+/.match? offset.to_s }
+      #{ "LIMIT #{limit}" if /\d+/.match? limit.to_s }
     )).first
   end
 
